@@ -1,0 +1,22 @@
+{% extends 'index.html' %}
+
+
+{% block titulo %}
+Creacion de libros
+{% endblock titulo %}
+{% block titulo_principal %}
+Creación/Edición de libros
+{% endblock titulo_principal %}
+{% block body %}
+  {% if error %}
+    <div class="alert alert-danger" role="alert">
+      {{error}}
+    </div>
+  {% endif %}
+    <form  method="post">
+      {% csrf_token %}
+      {{form.as_p}}
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+
+{% endblock body %}

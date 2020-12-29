@@ -1,0 +1,45 @@
+{% extends 'index.html' %}
+{% block titulo %}
+  Listado de autores
+{% endblock titulo %}
+
+{% block titulo_principal %}
+Listado de autores
+{% endblock titulo_principal %}
+
+{% block body %}
+  {% if autores %}
+      <table class="table table-striped table-bordered dataTable no-footer">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Nombre</th>
+            <th>Apellido</th>
+            <th>Nacionalidad</th>
+            <th>Descripcion</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for autor in autores %}
+          <tr>
+            <td>{{autor.id}}</td>
+            <td>{{autor.nombre}}</td>
+            <td>{{autor.apellido}}</td>
+            <td>{{autor.nacionalidad}}</td>
+            <td>{{autor.descripcion}}</td>
+            <td><a class="btn btn-primary" href="{% url 'libro:editar_autor' autor.id %}">Editar</a>
+            <a class="btn btn-danger" href="{% url 'libro:eliminar_autor' autor.id %}">Eliminar</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  {% else %}
+    <h1>No existen autores registrados</h1>
+
+  {% endif %}
+
+  {% if error %}
+  <h2>Se ha producido un error:  {{error}}</h2>
+  {% endif %}
+{% endblock body %}

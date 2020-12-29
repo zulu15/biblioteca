@@ -1,0 +1,47 @@
+{% extends 'index.html' %}
+{% block titulo %}
+  Listado de libros
+{% endblock titulo %}
+
+{% block titulo_principal %}
+Listado de libros
+{% endblock titulo_principal %}
+
+{% block body %}
+  {% if object_list %}
+      <table class="table table-striped table-bordered dataTable no-footer">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Título</th>
+            <th>Autor(es)</th>
+            <th>Fecha de publicación</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for libro in object_list %}
+          <tr>
+            <td>{{libro.id}}</td>
+            <td>{{libro.titulo}}</td>
+            <td>
+                {% for autor in libro.autor_id.all %}
+                  <li><a href="{% url 'libro:editar_autor' autor.id %}">{{autor}}</a></li>
+                {% endfor %}
+            </td>
+            <td>{{libro.fecha_publicacion}}</td>
+            <td><a class="btn btn-primary" href="{% url 'libro:editar_libro' libro.id %}">Editar</a>
+            <a class="btn btn-danger" href="{% url 'libro:eliminar_libro' libro.id %}">Eliminar</a></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+  {% else %}
+    <h3>No existen libros registrados</h3>
+
+  {% endif %}
+
+  {% if error %}
+  <h2>Se ha producido un error:  {{error}}</h2>
+  {% endif %}
+{% endblock body %}

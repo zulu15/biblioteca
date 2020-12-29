@@ -1,0 +1,55 @@
+{% extends 'index.html' %}
+
+
+{% block titulo %}
+Creacion de autores
+{% endblock titulo %}
+{% block titulo_principal %}
+Creación/Edición de autores
+{% endblock titulo_principal %}
+{% block body %}
+  {% if error %}
+    <div class="alert alert-danger" role="alert">
+      {{error}}
+    </div>
+  {% endif %}
+    <form  method="post">
+      <div class="row form-group">
+        <div class="col col-md-3">
+          {{form.nombre.label}}
+        </div>
+        <div class="col-12 col-md-9">
+          {{form.nombre}}
+        </div>
+
+      </div>
+      <div class="row form-group">
+        <div class="col col-md-3">
+          {{form.apellido.label}}
+        </div>
+        <div class="col-12 col-md-9">
+          {{form.apellido}}
+        </div>
+      </div>
+      <div class="row form-group">
+        <div class="col col-md-3">
+          {{form.nacionalidad.label}}
+        </div>
+        <div class="col-12 col-md-9">
+          {{form.nacionalidad}}
+        </div>
+
+      </div>
+      <div class="row form-group">
+        <div class="col col-md-3">
+          {{form.descripcion.label}}
+        </div>
+        <div class="col-12 col-md-9">
+          {{form.descripcion}}
+        </div>
+      </div>
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
+
+{% endblock body %}
