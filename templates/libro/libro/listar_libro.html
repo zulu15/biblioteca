@@ -42,6 +42,16 @@ Listado de libros
   {% endif %}
 
   {% if error %}
-  <h2>Se ha producido un error:  {{error}}</h2>
+    <div class="alert alert-danger" role="alert">
+      {{error}}
+    </div>
   {% endif %}
+  <p>&nbsp;</p>
+  <h3>Creacion/Edición de libros</h3>
+  <p>&nbsp;</p>
+    <form  method="post">
+      {% csrf_token %}
+      {{form.as_p}}
+      <button type="submit" class="btn btn-primary">Guardar</button>
+    </form>
 {% endblock body %}

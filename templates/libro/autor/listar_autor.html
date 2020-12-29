@@ -42,4 +42,47 @@ Listado de autores
   {% if error %}
   <h2>Se ha producido un error:  {{error}}</h2>
   {% endif %}
+
+  <p>&nbsp;</p>
+  <h3>Creación/Edición de Autores</h3>
+  <p>&nbsp;</p>
+  <form  method="post">
+    <div class="row form-group">
+      <div class="col col-md-3">
+        {{form.nombre.label}}
+      </div>
+      <div class="col-12 col-md-9">
+        {{form.nombre}}
+      </div>
+
+    </div>
+    <div class="row form-group">
+      <div class="col col-md-3">
+        {{form.apellido.label}}
+      </div>
+      <div class="col-12 col-md-9">
+        {{form.apellido}}
+      </div>
+    </div>
+    <div class="row form-group">
+      <div class="col col-md-3">
+        {{form.nacionalidad.label}}
+      </div>
+      <div class="col-12 col-md-9">
+        {{form.nacionalidad}}
+      </div>
+
+    </div>
+    <div class="row form-group">
+      <div class="col col-md-3">
+        {{form.descripcion.label}}
+      </div>
+      <div class="col-12 col-md-9">
+        {{form.descripcion}}
+      </div>
+    </div>
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Guardar</button>
+  </form>
+
 {% endblock body %}

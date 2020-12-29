@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
-from django.views.generic import TemplateView, ListView, UpdateView, CreateView, DeleteView
+from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -14,23 +14,44 @@ from .models import Autor, Libro
 class Inicio(LoginRequiredMixin, TemplateView):
     template_name = 'index.html'
 
-class ListarAutor(LoginRequiredMixin, ListView):
+class ListarAutor(LoginRequiredMixin, View):
     template_name = 'libro/autor/listar_autor.html'
     model = Autor
     context_object_name = "autores"
-    queryset = Autor.objects.filter(estado = True).order_by('-pk')
-
-class CrearAutor(LoginRequiredMixin, CreateView):
-    model = Autor
-    template_name = "libro/autor/crear_autor.html"
     form_class = AutorForm
-    success_url = reverse_lazy("libro:listar_autor")
+
+
+    def get_queryset(self):
+        return self.model.objects.filter(estado = True).order_by('-pk')
+
+    def get_context_data(self,**kargs):
+        contexto = {}
+        contexto['autores'] = self.get_queryset()
+        contexto['form'] = self.form_class
+        return contexto
+
+    def post(self, request, *args, **kargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("libro:listar_autor")
+
+
+    def get(self, request, *args, **kargs):
+        return render(request, self.template_name, self.get_context_data())
+
+
 
 class EditarAutor(LoginRequiredMixin, UpdateView):
-    template_name = 'libro/autor/crear_autor.html'
+    template_name = 'libro/autor/listar_autor.html'
     model = Autor
     form_class = AutorForm
     success_url = reverse_lazy("libro:listar_autor")
+
+    def get_context_data(self,**kargs):
+        context = super().get_context_data(**kargs)
+        context['autores'] = self.model.objects.filter(estado = True).order_by('-pk')
+        return context
 
 class EliminarAutor(LoginRequiredMixin, DeleteView):
     model = Autor
@@ -47,24 +68,42 @@ class EliminarAutor(LoginRequiredMixin, DeleteView):
 
 # Empiezan las vistas del modelo Libro
 
-class ListarLibro(ListView):
+class ListarLibro(LoginRequiredMixin,View):
     model = Libro
     template_name = "libro/libro/listar_libro.html"
-    queryset = Libro.objects.filter(estado = True).order_by('-pk')
+    form_class = LibroForm
 
-class CrearLibro(CreateView):
+    def post(self,request,*args,**kargs):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("libro:listar_libro")
+
+    def get_queryset(self):
+        return self.model.objects.filter(estado = True).order_by('-pk')
+
+    def get_context_data(self, **kargs):
+        contexto = {}
+        contexto['object_list'] = self.get_queryset()
+        contexto['form'] = self.form_class
+        return contexto
+
+    def get(self, request, *args, **kargs):
+        return render(request, self.template_name, self.get_context_data())
+
+
+class EditarLibro(LoginRequiredMixin,UpdateView):
     model = Libro
     form_class = LibroForm
-    template_name = "libro/libro/crear_libro.html"
+    template_name = "libro/libro/listar_libro.html"
     success_url = reverse_lazy("libro:listar_libro")
 
-class EditarLibro(UpdateView):
-    model = Libro
-    form_class = LibroForm
-    template_name = "libro/libro/crear_libro.html"
-    success_url = reverse_lazy("libro:listar_libro")
+    def get_context_data(self,**kargs):
+        context = super().get_context_data(**kargs)
+        context['object_list'] = self.model.objects.filter(estado = True).order_by('-pk')
+        return context
 
-class EliminarLibro(DeleteView):
+class EliminarLibro(LoginRequiredMixin,DeleteView):
     model = Libro
     success_url = reverse_lazy("libro:listar_libro")
 
