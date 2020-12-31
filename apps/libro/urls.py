@@ -9,7 +9,7 @@ urlpatterns = [
 
 
     path("listar_libro",ListarLibro.as_view(), name = "listar_libro"),
-    #path("crear_libro",CrearLibro.as_view(), name = "crear_libro"),
+    path("crear_libro",CrearLibro.as_view(), name = "crear_libro"),
     path("editar_libro/<int:pk>",EditarLibro.as_view(), name = "editar_libro"),
     path('eliminar_libro/<int:pk>', EliminarLibro.as_view(), name="eliminar_libro"),
 ]

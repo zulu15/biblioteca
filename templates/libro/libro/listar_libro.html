@@ -30,7 +30,7 @@ Listado de libros
                 {% endfor %}
             </td>
             <td>{{libro.fecha_publicacion}}</td>
-            <td><a class="btn btn-primary" href="{% url 'libro:editar_libro' libro.id %}">Editar</a>
+            <td><button type="button" class="btn btn-primary" onclick="abrir_modal_edicion('{% url 'libro:editar_libro' libro.id %}')">Editar</button>
             <a class="btn btn-danger" href="{% url 'libro:eliminar_libro' libro.id %}">Eliminar</a></td>
           </tr>
           {% endfor %}
@@ -46,12 +46,41 @@ Listado de libros
       {{error}}
     </div>
   {% endif %}
-  <p>&nbsp;</p>
-  <h3>Creacion/Edición de libros</h3>
-  <p>&nbsp;</p>
-    <form  method="post">
-      {% csrf_token %}
-      {{form.as_p}}
-      <button type="submit" class="btn btn-primary">Guardar</button>
-    </form>
+
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" onclick="abrir_modal_creacion('{% url 'libro:crear_libro' %}')">Crear libro</button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="creacion" role="dialog">
+
+  </div>
+
+  <div class="modal fade" id="edicion" role="dialog">
+
+  </div>
+
+
+
+
 {% endblock body %}
+
+
+{% block extrajs %}
+
+  <script type="text/javascript">
+    $ = jQuery.noConflict();
+    function abrir_modal_creacion(url){
+      $("#creacion").load(url, function(){
+        $(this).modal('show');
+      });
+    }
+
+    function abrir_modal_edicion(url){
+      $("#edicion").load(url, function(){
+        $(this).modal('show');
+      });
+    }
+  </script>
+
+{% endblock extrajs %}

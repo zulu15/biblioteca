@@ -14,7 +14,6 @@
 
     <link rel="apple-touch-icon" href="https://i.imgur.com/QRAUqs9.png">
     <link rel="shortcut icon" href="https://i.imgur.com/QRAUqs9.png">
-    {% block extracss %}
 
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/normalize.css@8.0.0/normalize.min.css">
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css">
@@ -27,7 +26,8 @@
       <link rel="stylesheet" href="{% static 'css/style.css' %}">
 
       <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,800' rel='stylesheet' type='text/css'>
-    {% endblock extracss %}
+      {% block extracss %}
+      {% endblock extracss %}
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/html5shiv/3.7.3/html5shiv.min.js"></script> -->
 
 </head>
@@ -49,7 +49,7 @@
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Autores</a>
                       <ul class="sub-menu children dropdown-menu">
                           <li><i class="fa fa-table"></i><a href="{% url 'libro:listar_autor' %}">Ver autores</a></li>
-                          
+
                       </ul>
                   </li>
                   <li class="menu-item-has-children dropdown">
@@ -143,25 +143,17 @@
     <!-- Right Panel -->
 
     <!-- Scripts -->
-    {% block extrajs  %}
-    <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
-    <script src="{% static 'js/main.js' %}"></script>
 
 
-    <script src="{% static 'js/lib/data-table/datatables.min.js' %}"></script>
-    <script src="{% static 'js/lib/data-table/dataTables.bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/lib/data-table/dataTables.buttons.min.js' %}"></script>
-    <script src="{% static 'js/lib/data-table/buttons.bootstrap.min.js' %}"></script>
-    <script src="{% static 'js/lib/data-table/jszip.min.js' %}"></script>
-    <script src="{% static 'js/lib/data-table/vfs_fonts.js' %}"></script>
-    <script src="{% static 'js/lib/data-table/buttons.html5.min.js' %}"></script>
-    <script src="{% static 'js/lib/data-table/buttons.print.min.js' %}"></script>
-    <script src="{% static 'js/lib/data-table/buttons.colVis.min.js' %}"></script>
-    <script src="{% static 'js/init/datatables-init.js' %}"></script>
-    {% endblock extrajs %}
+    <!-- Scripts -->
+      <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.4/dist/jquery.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.4/dist/umd/popper.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/jquery-match-height@0.7.2/dist/jquery.matchHeight.min.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+      <script src="{% static 'js/main.js' %}"></script>
+      {% block extrajs  %}
+      {% endblock extrajs %}
 
 <!--
     <script type="text/javascript">

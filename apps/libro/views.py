@@ -68,40 +68,28 @@ class EliminarAutor(LoginRequiredMixin, DeleteView):
 
 # Empiezan las vistas del modelo Libro
 
-class ListarLibro(LoginRequiredMixin,View):
+class ListarLibro(LoginRequiredMixin,ListView):
     model = Libro
     template_name = "libro/libro/listar_libro.html"
     form_class = LibroForm
+    queryset = Libro.objects.filter(estado = True).order_by('-pk')
 
-    def post(self,request,*args,**kargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("libro:listar_libro")
 
-    def get_queryset(self):
-        return self.model.objects.filter(estado = True).order_by('-pk')
 
-    def get_context_data(self, **kargs):
-        contexto = {}
-        contexto['object_list'] = self.get_queryset()
-        contexto['form'] = self.form_class
-        return contexto
-
-    def get(self, request, *args, **kargs):
-        return render(request, self.template_name, self.get_context_data())
+class CrearLibro(CreateView):
+    model = Libro
+    form_class = LibroForm
+    template_name = 'libro/libro/crear_libro.html'
+    success_url = reverse_lazy("libro:listar_libro")
 
 
 class EditarLibro(LoginRequiredMixin,UpdateView):
     model = Libro
     form_class = LibroForm
-    template_name = "libro/libro/listar_libro.html"
+    template_name = "libro/libro/editar_libro.html"
     success_url = reverse_lazy("libro:listar_libro")
 
-    def get_context_data(self,**kargs):
-        context = super().get_context_data(**kargs)
-        context['object_list'] = self.model.objects.filter(estado = True).order_by('-pk')
-        return context
+
 
 class EliminarLibro(LoginRequiredMixin,DeleteView):
     model = Libro
