@@ -14,44 +14,18 @@ from .models import Autor, Libro
 class Inicio(LoginRequiredMixin, TemplateView):
     template_name = 'index.html'
 
-class ListarAutor(LoginRequiredMixin, View):
+class ListarAutor(LoginRequiredMixin, ListView):
     template_name = 'libro/autor/listar_autor.html'
     model = Autor
     context_object_name = "autores"
-    form_class = AutorForm
-
-
-    def get_queryset(self):
-        return self.model.objects.filter(estado = True).order_by('-pk')
-
-    def get_context_data(self,**kargs):
-        contexto = {}
-        contexto['autores'] = self.get_queryset()
-        contexto['form'] = self.form_class
-        return contexto
-
-    def post(self, request, *args, **kargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("libro:listar_autor")
-
-
-    def get(self, request, *args, **kargs):
-        return render(request, self.template_name, self.get_context_data())
-
+    queryset = Autor.objects.filter(estado = True).order_by('-pk')
 
 
 class EditarAutor(LoginRequiredMixin, UpdateView):
-    template_name = 'libro/autor/listar_autor.html'
+    template_name = 'libro/autor/editar_autor.html'
     model = Autor
     form_class = AutorForm
     success_url = reverse_lazy("libro:listar_autor")
-
-    def get_context_data(self,**kargs):
-        context = super().get_context_data(**kargs)
-        context['autores'] = self.model.objects.filter(estado = True).order_by('-pk')
-        return context
 
 class EliminarAutor(LoginRequiredMixin, DeleteView):
     model = Autor
@@ -63,6 +37,11 @@ class EliminarAutor(LoginRequiredMixin, DeleteView):
         return redirect(self.success_url)
 
 
+class CrearAutor(CreateView):
+    form_class = AutorForm
+    model = Autor
+    success_url = reverse_lazy("libro:listar_autor")
+    template_name = "libro/autor/crear_autor.html"
 
 
 

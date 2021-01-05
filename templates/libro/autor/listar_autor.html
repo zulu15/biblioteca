@@ -28,7 +28,7 @@ Listado de autores
             <td>{{autor.apellido}}</td>
             <td>{{autor.nacionalidad}}</td>
             <td>{{autor.descripcion}}</td>
-            <td><a class="btn btn-primary" href="{% url 'libro:editar_autor' autor.id %}">Editar</a>
+            <td><button type="button" class="btn btn-primary" onclick="abrir_modal_edicion('{% url 'libro:editar_autor' autor.id %}')">Editar</button>
             <a class="btn btn-danger" href="{% url 'libro:eliminar_autor' autor.id %}">Eliminar</a></td>
           </tr>
           {% endfor %}
@@ -43,46 +43,27 @@ Listado de autores
   <h2>Se ha producido un error:  {{error}}</h2>
   {% endif %}
 
-  <p>&nbsp;</p>
-  <h3>Creación/Edición de Autores</h3>
-  <p>&nbsp;</p>
-  <form  method="post">
-    <div class="row form-group">
-      <div class="col col-md-3">
-        {{form.nombre.label}}
-      </div>
-      <div class="col-12 col-md-9">
-        {{form.nombre}}
-      </div>
+<button type="button" class="btn btn-primary" onclick="abrir_modal_creacion('{% url 'libro:crear_autor' %}')">Crear autor</button>
 
-    </div>
-    <div class="row form-group">
-      <div class="col col-md-3">
-        {{form.apellido.label}}
-      </div>
-      <div class="col-12 col-md-9">
-        {{form.apellido}}
-      </div>
-    </div>
-    <div class="row form-group">
-      <div class="col col-md-3">
-        {{form.nacionalidad.label}}
-      </div>
-      <div class="col-12 col-md-9">
-        {{form.nacionalidad}}
-      </div>
+<div class="modal fade" id="creacion" role="dialog"></div>
+<div class="modal fade" id="edicion" role="dialog"></div>
 
-    </div>
-    <div class="row form-group">
-      <div class="col col-md-3">
-        {{form.descripcion.label}}
-      </div>
-      <div class="col-12 col-md-9">
-        {{form.descripcion}}
-      </div>
-    </div>
-    {% csrf_token %}
-    <button type="submit" class="btn btn-primary">Guardar</button>
-  </form>
 
 {% endblock body %}
+
+{% block extrajs %}
+  <script type="text/javascript">
+    $ = jQuery.noConflict();
+    function abrir_modal_creacion(url){
+      $("#creacion").load(url, function(){
+        $(this).modal('show');
+      });
+    }
+
+    function abrir_modal_edicion(url){
+      $("#edicion").load(url,function(){
+          $(this).modal("show");
+      });
+    }
+  </script>
+{% endblock extrajs %}
