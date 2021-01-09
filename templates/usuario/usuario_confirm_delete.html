@@ -2,10 +2,10 @@
 
 
 {% block titulo %}
-Eliminación de autores
+Eliminación de usuario
 {% endblock titulo %}
 {% block titulo_principal %}
-  Eliminación de autores
+  Eliminación de usuario
 {% endblock %}
 {% block body %}
   {% if error %}
@@ -13,10 +13,10 @@ Eliminación de autores
   {% else %}
     <form  method="post">
       {% csrf_token %}
-      <h3>¿Está seguro que desea eliminar al autor: "{{ object }}"?</h3>
+      <h3>¿Está seguro que desea eliminar al usuario: "{{ object }}"?</h3>
       <p></p>
       <button type="submit" class="btn btn-primary">Confirmar</button>
-      <a class="btn btn-danger" href="{% url 'libro:listar_autor' %}">Cancelar</a>
+      <a class="btn btn-danger" href="{% url 'usuario:listar_usuario' %}">Cancelar</a>
     </form>
   {% endif %}
 {% endblock body %}

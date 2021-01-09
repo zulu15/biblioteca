@@ -44,8 +44,18 @@
                       <a href="{% url 'index' %}"><i class="menu-icon fa fa-laptop"></i>Inicio </a>
                   </li>
                   <li class="menu-title">Opciones</li><!-- /.menu-title -->
+                  {% if request.user.is_staff %}
+                  <li class="menu-item-has-children dropdown">
+                      <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Usuarios</a>
+                      <ul class="sub-menu children dropdown-menu">
+                          <li><i class="fa fa-table"></i><a href="{% url 'usuario:listar_usuario' %}">Ver Usuarios</a></li>
+                          <li><i class="fa fa-table"></i><a href="{% url 'usuario:crear_usuario' %}">Crear Usuarios</a></li>
 
-                  <li class="menu-item-has-children active dropdown">
+                      </ul>
+                  </li>
+                  {% endif %}
+
+                  <li class="menu-item-has-children dropdown">
                       <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"> <i class="menu-icon fa fa-table"></i>Autores</a>
                       <ul class="sub-menu children dropdown-menu">
                           <li><i class="fa fa-table"></i><a href="{% url 'libro:listar_autor' %}">Ver autores</a></li>

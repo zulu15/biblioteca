@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from apps.libro.views import Inicio
-from apps.login.views import login_view, logout_view
+from apps.usuario.views import login_view, logout_view
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
@@ -24,5 +24,6 @@ urlpatterns = [
     path('libro/', include(('apps.libro.urls','libro'))),
     path("", Inicio.as_view() , name = "index"),
     path("accounts/login/", login_view , name = "login"),
-    path('logout/', login_required(logout_view), name = "logout")
+    path('logout/', login_required(logout_view), name = "logout"),
+    path('usuario/', include(('apps.usuario.urls','usuario'))),
 ]

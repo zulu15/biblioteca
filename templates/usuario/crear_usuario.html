@@ -1,0 +1,18 @@
+{% extends 'index.html' %}
+{% block titulo %}
+Creación de usuario
+{% endblock titulo %}
+
+{% block titulo_principal %}
+Creación de usuario
+{% endblock titulo_principal %}
+
+{% block body %}
+<form method="post">
+  {% csrf_token %}
+  {{form.as_p}}
+  <a href="{% url 'usuario:listar_usuario' %}" class="btn btn-secondary">Cancelar</a>
+  <button type="submit" name="button" class="btn btn-primary">Crear usuario</button>
+</form>
+
+{% endblock body %}
