@@ -1,8 +1,13 @@
+import json
+from django.core.serializers import serialize
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
-from django.views.generic import CreateView, ListView, DeleteView, UpdateView
+from django.views.generic import CreateView, ListView, DeleteView, UpdateView, TemplateView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import get_object_or_404
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponse
 from .models import Usuario
 from .forms import UsuarioForm
 
@@ -33,20 +38,36 @@ class CrearUsuario(LoginRequiredMixin, CreateView):
     template_name = "usuario/crear_usuario.html"
 
 
+
 class ListarUsuario(LoginRequiredMixin, ListView):
     model = Usuario
     template_name = "usuario/listar_usuario.html"
     queryset = Usuario.objects.filter(is_active = True)
+
+    def get(self, request, *args, **kargs):
+        if request.is_ajax():
+            lista_usuarios = self.queryset
+            return HttpResponse(serialize('json', lista_usuarios), 'application/json')
+        else:
+            return redirect("usuario:inicio_usuario")
 
 class EliminarUsuario(DeleteView):
     model = Usuario
     success_url = reverse_lazy("usuario:listar_usuario")
 
     def post(self,request,pk,*args,**kargs):
-        usuario = Usuario.objects.get(pk = pk)
+        usuario = get_object_or_404(self.Model, pk = pk)
         usuario.is_active = False
         usuario.save()
         return redirect(self.success_url)
+
+    def get_object(self, queryset=None):
+        """ Hook to ensure object is not admin. """
+        obj = super(EliminarUsuario, self).get_object()
+        if obj.is_admin:
+            raise PermissionDenied("No está permitido eliminar usuarios administradores")
+
+        return obj
 
 
 class EditarUsuario(UpdateView):
