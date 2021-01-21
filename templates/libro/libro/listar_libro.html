@@ -26,7 +26,7 @@ Listado de libros
             <td>{{libro.titulo}}</td>
             <td>
                 {% for autor in libro.autor_id.all %}
-                  <li><a href="{% url 'libro:editar_autor' autor.id %}">{{autor}}</a></li>
+                  <li><a onclick="abrir_modal_edicion('{% url 'libro:editar_autor' autor.id %}')">{{autor}}</a></li>
                 {% endfor %}
             </td>
             <td>{{libro.fecha_publicacion}}</td>
@@ -64,23 +64,3 @@ Listado de libros
 
 
 {% endblock body %}
-
-
-{% block extrajs %}
-
-  <script type="text/javascript">
-    $ = jQuery.noConflict();
-    function abrir_modal_creacion(url){
-      $("#creacion").load(url, function(){
-        $(this).modal('show');
-      });
-    }
-
-    function abrir_modal_edicion(url){
-      $("#edicion").load(url, function(){
-        $(this).modal('show');
-      });
-    }
-  </script>
-
-{% endblock extrajs %}

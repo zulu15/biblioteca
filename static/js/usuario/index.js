@@ -2,8 +2,13 @@ $ = jQuery.noConflict();
 
 function listadoUsuario(){
 
+  if ($.fn.dataTable.isDataTable( '#tabla_usuarios' )) {
+      $('#tabla_usuarios').DataTable().destroy();
+      console.log("a destruir")
+  }
+
   $.ajax({
-    'url':'/usuario/listar_usuario',
+    'url':'/usuario/listar_usuario/',
     'type':'get',
     'dataType':'json',
     'success': function(response){
@@ -54,6 +59,25 @@ function listadoUsuario(){
 
   })
 
+}
+
+
+
+function registrar(){
+	$.ajax({
+		'url':$("#form_creacion").attr("action"),
+		'type':$("#form_creacion").attr("method"),
+		'data':$("#form_creacion").serialize(),
+		'dataType':'json',
+		'success': function(response){
+			listadoUsuario();
+			cerrar_modal_creacion();
+		},
+		'error': function(error){
+			console.log(error)
+
+		}
+	})
 }
 
 

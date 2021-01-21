@@ -1,18 +1,22 @@
-{% extends 'index.html' %}
-{% block titulo %}
-Creación de usuario
-{% endblock titulo %}
+<div class="modal-dialog modal-lg" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Creacion de Usuario</h2>
+      <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form id="form_creacion" action="{% url 'usuario:crear_usuario' %}" method="POST">
+      {% csrf_token %}
+      <div class="modal-body">
+        <div id="errores">
 
-{% block titulo_principal %}
-Creación de usuario
-{% endblock titulo_principal %}
-
-{% block body %}
-<form method="post">
-  {% csrf_token %}
-  {{form.as_p}}
-  <a href="{% url 'usuario:listar_usuario' %}" class="btn btn-secondary">Cancelar</a>
-  <button type="submit" name="button" class="btn btn-primary">Crear usuario</button>
-</form>
-
-{% endblock body %}
+        </div>
+        {{ form.as_p }}
+      </div>
+      <div class="modal-footer">
+        <button id="boton_creacion" class="btn btn-primary" type="button" onclick="registrar()">Confirmar</button>
+      </div>
+    </form>
+  </div>
+</div>

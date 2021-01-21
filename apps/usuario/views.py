@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from .models import Usuario
 from .forms import UsuarioForm
 
@@ -37,16 +37,35 @@ class CrearUsuario(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy("usuario:listar_usuario")
     template_name = "usuario/crear_usuario.html"
 
+    def post(self, request, *args, **kargs):
+        if request.is_ajax():
+            usuario_form = self.form_class(request.POST)
+            if usuario_form.is_valid():
+                usuario_form.save()
+                mensaje = f'{self.model.__name__} registrado correctamente!'
+                error = "No hay error!"
+                response = JsonResponse({"mensaje":mensaje, "error": error})
+                response.status_code = 201
+                return response
+            else:
+                mensaje = f'{self.model.__name__} no se ha registrado correctamente!'
+                error = usuario_form.errors
+                response = JsonResponse({"mensaje":mensaje, "error": error})
+                response.status_code = 400
+                return response
+        else:
+            return redirect("usuario:inicio_usuario")
+
 
 
 class ListarUsuario(LoginRequiredMixin, ListView):
     model = Usuario
     template_name = "usuario/listar_usuario.html"
-    queryset = Usuario.objects.filter(is_active = True)
+    queryset = Usuario.objects.filter(is_active = True).all()
 
     def get(self, request, *args, **kargs):
         if request.is_ajax():
-            lista_usuarios = self.queryset
+            lista_usuarios = Usuario.objects.filter(is_active = True).order_by("-id")
             return HttpResponse(serialize('json', lista_usuarios), 'application/json')
         else:
             return redirect("usuario:inicio_usuario")
