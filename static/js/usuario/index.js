@@ -54,7 +54,7 @@ function listadoUsuario(){
       });
     },
     'error': function(error){
-      console.log(error)
+
     }
 
   })
@@ -70,11 +70,13 @@ function registrar(){
 		'data':$("#form_creacion").serialize(),
 		'dataType':'json',
 		'success': function(response){
+      notificarExito(response.mensaje);
 			listadoUsuario();
 			cerrar_modal_creacion();
 		},
 		'error': function(error){
-			console.log(error)
+      notificarError(error.responseJSON.mensaje);
+			mostrarErrorCreacion(error);
 
 		}
 	})

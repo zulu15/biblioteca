@@ -48,7 +48,7 @@ class CrearUsuario(LoginRequiredMixin, CreateView):
                 response.status_code = 201
                 return response
             else:
-                mensaje = f'{self.model.__name__} no se ha registrado correctamente!'
+                mensaje = f' El {self.model.__name__} no se ha registrado correctamente '
                 error = usuario_form.errors
                 response = JsonResponse({"mensaje":mensaje, "error": error})
                 response.status_code = 400

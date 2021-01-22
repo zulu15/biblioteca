@@ -52,25 +52,29 @@ class UsuarioForm(forms.ModelForm):
             "username":forms.TextInput(
                 attrs={
                     "class":"form-control",
-                    "placeholder":"Ingrese su nombre de usuario"
+                    "placeholder":"Ingrese su nombre de usuario",
+                    "id":"username"
                 }
             ),
             "email":forms.EmailInput(
                 attrs={
                     "class":"form-control",
-                    "placeholder":"Ingrese su correo electrónico"
+                    "placeholder":"Ingrese su correo electrónico",
+                    "id":"email"
                 }
             ),
             "nombres":forms.TextInput(
                 attrs={
                     "class":"form-control",
-                    "placeholder":"Ingrese su nombre"
+                    "placeholder":"Ingrese su nombre",
+                    "id":"nombres"
                 }
             ),
             "apellidos":forms.TextInput(
                 attrs={
                     "class":"form-control",
-                    "placeholder":"Ingrese su apellido"
+                    "placeholder":"Ingrese su apellido",
+                    "id":"apellidos"
                 }
             )
         }

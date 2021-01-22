@@ -105,3 +105,34 @@ function abrir_modal_edicion(url){
 		$(this).modal('show');
 	});
 }
+
+
+function mostrarErrorCreacion(errores){
+	//Limpiamos los errores
+	$('#form_creacion').find('input').each(function(e){
+			 $('#'+this.id).next("div").remove();
+	});
+
+	for(var error in errores.responseJSON.error){
+		$('#'+error).after('<div class="alert alert-danger" role="alert">'+errores.responseJSON.error[error]+'</div>');
+
+	}
+}
+
+
+function notificarError(error){
+	Swal.fire({
+		icon: 'error',
+		title: 'Error...',
+		text: error
+	})
+}
+
+
+function notificarExito(mensaje){
+	Swal.fire(
+		'Buen trabajo!',
+		 mensaje,
+		'success'
+	)
+}
