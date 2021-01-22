@@ -9,18 +9,12 @@
     <form id="form_creacion" action="{% url 'usuario:crear_usuario' %}" method="POST">
       {% csrf_token %}
       <div class="modal-body">
-        <div id="errores">
-
-        </div>
         {{ form.as_p }}
       </div>
       <div class="modal-footer">
         <button id="boton_creacion" class="btn btn-primary" type="button" onclick="registrar()">Confirmar</button>
       </div>
 
-      <div id="errores_creacion">
-
-      </div>
     </form>
   </div>
 </div>

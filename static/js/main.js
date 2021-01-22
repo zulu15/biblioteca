@@ -96,6 +96,14 @@ function abrir_modal_creacion(url){
 	});
 }
 
+
+function abrir_modal_edicion(url){
+	$("#edicion").load(url, function(){
+		$(this).modal('show');
+	});
+}
+
+
 function cerrar_modal_creacion(){
 	$("#creacion").modal('hide');
 }
@@ -104,6 +112,10 @@ function abrir_modal_edicion(url){
 	$("#edicion").load(url, function(){
 		$(this).modal('show');
 	});
+}
+
+function cerrar_modal_edicion(){
+	$("#edicion").modal('hide');
 }
 
 
@@ -119,6 +131,18 @@ function mostrarErrorCreacion(errores){
 	}
 }
 
+
+function mostrarErrorEdicion(errores){
+	//Limpiamos los errores
+	$('#form_edicion').find('input').each(function(e){
+			 $('#'+this.id).next("div").remove();
+	});
+
+	for(var error in errores.responseJSON.error){
+		$('#'+error).after('<div class="alert alert-danger" role="alert">'+errores.responseJSON.error[error]+'</div>');
+
+	}
+}
 
 function notificarError(error){
 	Swal.fire({

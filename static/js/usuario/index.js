@@ -4,7 +4,6 @@ function listadoUsuario(){
 
   if ($.fn.dataTable.isDataTable( '#tabla_usuarios' )) {
       $('#tabla_usuarios').DataTable().destroy();
-      console.log("a destruir")
   }
 
   $.ajax({
@@ -23,7 +22,8 @@ function listadoUsuario(){
         fila+= "<td>"+response[i].fields["nombres"]+"</td>"
         fila+= "<td>"+response[i].fields["apellidos"]+"</td>"
         fila+= "<td>"+response[i].fields["is_admin"]+"</td>"
-        fila+= "<td><button class='btn btn-primary'>Editar</button>&nbsp;&nbsp;<button class='btn btn-danger'>Eliminar</button></td>"
+        fila+= "<td><button class='btn btn-primary' onclick='abrir_modal_edicion(\"/usuario/editar_usuario/"+response[i]["pk"]+"\")'>Editar</button>&nbsp;&nbsp;"
+        fila+= "<button onclick='eliminar("+response[i]["pk"]+")' class='btn btn-danger'>Eliminar</button></td>"
         fila+="</tr>"
         $("#tabla_usuarios tbody").append(fila)
       }
@@ -70,9 +70,9 @@ function registrar(){
 		'data':$("#form_creacion").serialize(),
 		'dataType':'json',
 		'success': function(response){
+      cerrar_modal_creacion();
       notificarExito(response.mensaje);
 			listadoUsuario();
-			cerrar_modal_creacion();
 		},
 		'error': function(error){
       notificarError(error.responseJSON.mensaje);
@@ -80,6 +80,54 @@ function registrar(){
 
 		}
 	})
+}
+
+function editar(){
+	$.ajax({
+		'url':$("#form_edicion").attr("action"),
+		'type':$("#form_edicion").attr("method"),
+		'data':$("#form_edicion").serialize(),
+		'dataType':'json',
+		'success': function(response){
+      cerrar_modal_edicion();
+      notificarExito(response.mensaje);
+			listadoUsuario();
+		},
+		'error': function(error){
+      notificarError(error.responseJSON.mensaje);
+			mostrarErrorEdicion(error);
+
+		}
+	})
+}
+
+
+
+
+function eliminar(pk){
+  Swal.fire({
+  title: 'Eliminación de usuario',
+  text: "¿Está seguro que desea continuar?",
+  icon: 'warning',
+  showCancelButton: true,
+  confirmButtonColor: '#3085d6',
+  cancelButtonColor: '#d33',
+  confirmButtonText: 'Confirmar'
+  }).then((result) => {
+    if (result.isConfirmed) {
+    	$.ajax({
+        "url":"/usuario/eliminar_usuario/"+pk,
+        "type":"get",
+        "success": function(response){
+          notificarExito(response.mensaje);
+          listadoUsuario();
+        },
+        error: function(error){
+          notificarError(error.responseJSON.error);
+        }
+      })
+    }
+  })
 }
 
 

@@ -42,8 +42,8 @@ class UsuarioManager(BaseUserManager):
 class Usuario(AbstractBaseUser):
     username = models.CharField('Nombre de usuario',unique = True, max_length=100)
     email = models.EmailField('Correo Electrónico', max_length=254,unique = True)
-    nombres = models.CharField('Nombres', max_length=200, blank = True, null = True)
-    apellidos = models.CharField('Apellidos', max_length=200,blank = True, null = True)
+    nombres = models.CharField('Nombres', max_length=200, blank = True, null = False, default = "")
+    apellidos = models.CharField('Apellidos', max_length=200,blank = True, null = False, default = "")
     imagen = models.ImageField('Imagen de Perfil', upload_to='perfil/', max_length=200,blank = True,null = True)
     is_active = models.BooleanField(default = True)
     is_admin = models.BooleanField(default = False)
