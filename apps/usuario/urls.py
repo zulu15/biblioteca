@@ -9,6 +9,8 @@ urlpatterns = [
     path("eliminar_usuario/<int:pk>",EliminarUsuario.as_view(), name = "eliminar_usuario"),
     path("editar_usuario/<int:pk>",EditarUsuario.as_view(), name = "editar_usuario"),
 
+
+
 ]
 
 # VISTAS IMPLICITAS

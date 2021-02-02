@@ -22,8 +22,8 @@ function listadoUsuario(){
         fila+= "<td>"+response[i].fields["nombres"]+"</td>"
         fila+= "<td>"+response[i].fields["apellidos"]+"</td>"
         fila+= "<td>"+response[i].fields["is_admin"]+"</td>"
-        fila+= "<td><button class='btn btn-primary' onclick='abrir_modal_edicion(\"/usuario/editar_usuario/"+response[i]["pk"]+"\")'>Editar</button>&nbsp;&nbsp;"
-        fila+= "<button onclick='eliminar("+response[i]["pk"]+")' class='btn btn-danger'>Eliminar</button></td>"
+        fila+= "<td><button type='button' class='btn btn-primary' onclick='abrir_modal_edicion(\"/usuario/editar_usuario/"+response[i]["pk"]+"\")'>Editar</button>&nbsp;&nbsp;"
+        fila+= "<button type='button' class='btn btn-danger' onclick='abrir_modal_eliminacion(\"/usuario/eliminar_usuario/"+response[i]["pk"]+"\")'>Eliminar</button></td>"
         fila+="</tr>"
         $("#tabla_usuarios tbody").append(fila)
       }
@@ -101,33 +101,22 @@ function editar(){
 	})
 }
 
+function eliminar(){
+	$.ajax({
+		'url':$("#form_eliminacion").attr("action"),
+		'type':$("#form_eliminacion").attr("method"),
+		'data':$("#form_eliminacion").serialize(),
+		'dataType':'json',
+		'success': function(response){
+      cerrar_modal_eliminacion();
+      notificarExito(response.mensaje);
+			listadoUsuario();
+		},
+		'error': function(error){
+      notificarError(error.responseJSON.error);
 
-
-
-function eliminar(pk){
-  Swal.fire({
-  title: 'Eliminación de usuario',
-  text: "¿Está seguro que desea continuar?",
-  icon: 'warning',
-  showCancelButton: true,
-  confirmButtonColor: '#3085d6',
-  cancelButtonColor: '#d33',
-  confirmButtonText: 'Confirmar'
-  }).then((result) => {
-    if (result.isConfirmed) {
-    	$.ajax({
-        "url":"/usuario/eliminar_usuario/"+pk,
-        "type":"get",
-        "success": function(response){
-          notificarExito(response.mensaje);
-          listadoUsuario();
-        },
-        error: function(error){
-          notificarError(error.responseJSON.error);
-        }
-      })
-    }
-  })
+		}
+	})
 }
 
 

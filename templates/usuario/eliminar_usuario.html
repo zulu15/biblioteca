@@ -1,0 +1,20 @@
+<div class="modal-dialog modal-md" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Eliminación de Usuario</h2>
+      <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form id="form_eliminacion" action="{% url 'usuario:eliminar_usuario' object.id %}" method="POST">
+      {% csrf_token %}
+      <div class="modal-body">
+        <h4 class="text-center"><strong>¿Está seguro que desea eliminar el usuario "{{object}}"   ?</strong></h4>
+      </div>
+      <div class="modal-footer">
+        <button id="boton_eliminacion" class="btn btn-danger" type="button" onclick="eliminar()">Confirmar</button>
+      </div>
+
+    </form>
+  </div>
+</div>

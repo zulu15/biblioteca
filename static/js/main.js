@@ -114,32 +114,54 @@ function abrir_modal_edicion(url){
 	});
 }
 
+
 function cerrar_modal_edicion(){
 	$("#edicion").modal('hide');
 }
 
+function abrir_modal_eliminacion(url){
+	$("#eliminacion").load(url, function(){
+		$(this).modal('show');
+	});
+}
+
+
+function cerrar_modal_eliminacion(){
+	$("#eliminacion").modal('hide');
+}
+
+
 
 function mostrarErrorCreacion(errores){
 	//Limpiamos los errores
-	$('#form_creacion').find('input').each(function(e){
-			 $('#'+this.id).next("div").remove();
+
+	$('#form_creacion').find('input').each(function(){
+					if(this.id){
+							$(this).next("div").remove();
+					}
+
+
+
 	});
-
 	for(var error in errores.responseJSON.error){
-		$('#'+error).after('<div class="alert alert-danger" role="alert">'+errores.responseJSON.error[error]+'</div>');
-
+			$('#form_creacion #'+error).after('<div class="alert alert-danger" role="alert">'+errores.responseJSON.error[error]+'</div>');
 	}
+
+
 }
 
 
 function mostrarErrorEdicion(errores){
 	//Limpiamos los errores
-	$('#form_edicion').find('input').each(function(e){
-			 $('#'+this.id).next("div").remove();
+	$('#form_edicion').find('input').each(function(){
+			if(this.id){
+					$(this).next("div").remove();
+			}
+
 	});
 
 	for(var error in errores.responseJSON.error){
-		$('#'+error).after('<div class="alert alert-danger" role="alert">'+errores.responseJSON.error[error]+'</div>');
+		$('#form_edicion #'+error).after('<div class="alert alert-danger" role="alert">'+errores.responseJSON.error[error]+'</div>');
 
 	}
 }

@@ -72,24 +72,11 @@ class ListarUsuario(LoginRequiredMixin, ListView):
 
 class EliminarUsuario(DeleteView):
     model = Usuario
-    success_url = reverse_lazy("usuario:listar_usuario")
+    template_name = "usuario/eliminar_usuario.html"
 
-    def post(self,request,pk,*args,**kargs):
-        usuario = self.get_object()
-        usuario.is_active = False
-        usuario.save()
-        return redirect(self.success_url)
-
-    def get_object(self, queryset=None):
-        """ Hook to ensure object is not admin. """
-        obj = super(EliminarUsuario, self).get_object()
-        if obj.is_admin:
-            raise PermissionDenied("No está permitido eliminar usuarios administradores")
-        return obj
-
-    def get(self, request, pk, *args, **kargs):
+    def delete(self, request, *args, **kargs):
         if request.is_ajax():
-            usuario = get_object_or_404(self.model, pk = pk)
+            usuario = self.get_object()
             if usuario.is_admin:
                 error = "No tiene el permiso para eliminar usuarios administradores"
                 mensaje = f' El {self.model.__name__} no se pudo eliminar'
@@ -99,8 +86,7 @@ class EliminarUsuario(DeleteView):
                 usuario.save()
                 mensaje = f' El {self.model.__name__} se eliminó correctamente'
                 error = "No hay error"
-                status_code = 200
-
+                status_code = 201
 
             response = JsonResponse({"mensaje":mensaje, "error":error})
             response.status_code = status_code
