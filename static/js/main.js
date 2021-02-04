@@ -134,15 +134,8 @@ function cerrar_modal_eliminacion(){
 
 function mostrarErrorCreacion(errores){
 	//Limpiamos los errores
+	$("div.alert").remove();
 
-	$('#form_creacion').find('input').each(function(){
-					if(this.id){
-							$(this).next("div").remove();
-					}
-
-
-
-	});
 	for(var error in errores.responseJSON.error){
 			$('#form_creacion #'+error).after('<div class="alert alert-danger" role="alert">'+errores.responseJSON.error[error]+'</div>');
 	}

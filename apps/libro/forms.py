@@ -58,17 +58,20 @@ class LibroForm(forms.ModelForm):
             'titulo':forms.TextInput(
                 attrs = {
                     'placeholder':'Ingrese el Título del libro',
-                    'class':'form-control'
+                    'class':'form-control',
+                    'id':'titulo'
                 }
             ),
             'autor_id':forms.SelectMultiple(
                 attrs = {
-                    'class':'form-control'
+                    'class':'form-control',
+                    'id':'autor_id'
                 }
             ),
             'fecha_publicacion':forms.SelectDateWidget(
                 attrs = {
-                    'class':'form-control'
+                    'class':'form-control',
+                    'id':'fecha_publicacion'
                 }
             )
 

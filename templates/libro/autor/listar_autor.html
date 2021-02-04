@@ -1,43 +1,41 @@
 {% extends 'index.html' %}
+{% load static %}
 {% block titulo %}
   Listado de autores
 {% endblock titulo %}
+
+{% block extracss %}
+<link rel="stylesheet" href="//cdn.datatables.net/1.10.23/css/jquery.dataTables.min.css">
+{% endblock extracss %}
+
 
 {% block titulo_principal %}
 Listado de autores
 {% endblock titulo_principal %}
 
 {% block body %}
-  {% if autores %}
-      <table class="table table-striped table-bordered dataTable no-footer">
+  
+      <table class="table table-striped table-bordered dataTable no-footer" id="tabla_autores">
         <thead>
           <tr>
-            <th>#</th>
+            
             <th>Nombre</th>
             <th>Apellido</th>
             <th>Nacionalidad</th>
             <th>Descripcion</th>
+            <th>Fecha de creación</th>
+            <th>¿Activo?</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
-          {% for autor in autores %}
-          <tr>
-            <td>{{autor.id}}</td>
-            <td>{{autor.nombre}}</td>
-            <td>{{autor.apellido}}</td>
-            <td>{{autor.nacionalidad}}</td>
-            <td>{{autor.descripcion}}</td>
-            <td><button type="button" class="btn btn-primary" onclick="abrir_modal_edicion('{% url 'libro:editar_autor' autor.id %}')">Editar</button>
-            <a class="btn btn-danger" href="{% url 'libro:eliminar_autor' autor.id %}">Eliminar</a></td>
-          </tr>
-          {% endfor %}
+          
         </tbody>
       </table>
-  {% else %}
-    <h1>No existen autores registrados</h1>
+  
+  
 
-  {% endif %}
+  
 
   {% if error %}
   <h2>Se ha producido un error:  {{error}}</h2>
@@ -47,6 +45,14 @@ Listado de autores
 
 <div class="modal fade" id="creacion" role="dialog"></div>
 <div class="modal fade" id="edicion" role="dialog"></div>
+<div class="modal fade" id="eliminacion" role="dialog"></div>
 
 
 {% endblock body %}
+
+
+{% block extrajs %}
+  <script src="{% static 'js/libro/autor.js' %}"></script>
+  <script src="//cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+{% endblock extrajs %}
+  

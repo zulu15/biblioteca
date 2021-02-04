@@ -13,6 +13,9 @@ from .forms import UsuarioForm
 
 # Create your views here.
 
+
+
+    
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']

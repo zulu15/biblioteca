@@ -1,0 +1,19 @@
+<div class="modal-dialog modal-md" role="document">
+  <div class="modal-content">
+    <div class="modal-header">
+      <h2 class="modal-title">Eliminación de Libro</h2>
+      <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <form id="form_eliminacion" action="{% url 'libro:eliminar_libro' object.id %}" method="POST">
+      {% csrf_token %}
+      <div class="modal-body">
+        <h4><strong>¿Está seguro que desea eliminar "{{object}}"?</strong></h4>  
+      </div>
+      <div class="modal-footer">
+        <button id="boton_eliminacion" class="btn btn-danger" type="button" onclick="eliminar()">Confirmar</button>
+      </div>
+    </form>
+  </div>
+</div>
