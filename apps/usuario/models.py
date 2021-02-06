@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 
 
 
@@ -33,39 +33,30 @@ class UsuarioManager(BaseUserManager):
             password = password
         )
 
-        usuario.is_admin = True
+        usuario.is_staff = True
+        usuario.is_superuser = True
         usuario.save()
         return usuario
 
 
 
-class Usuario(AbstractBaseUser):
+class Usuario(AbstractBaseUser, PermissionsMixin):
     username = models.CharField('Nombre de usuario',unique = True, max_length=100)
     email = models.EmailField('Correo Electrónico', max_length=254,unique = True)
     nombres = models.CharField('Nombres', max_length=200, blank = True, null = False, default = "")
     apellidos = models.CharField('Apellidos', max_length=200,blank = True, null = False, default = "")
     imagen = models.ImageField('Imagen de Perfil', upload_to='perfil/', max_length=200,blank = True,null = True)
     is_active = models.BooleanField(default = True)
-    is_admin = models.BooleanField(default = False)
+    is_staff = models.BooleanField(default = False)
+    
 
     #Vinculamos nuestro modelo a nuestro propio Manager
     objects = UsuarioManager()
 
     USERNAME_FIELD = 'username'
-    REQUIRED_FIELDS = ['email','nombres']
+    REQUIRED_FIELDS = ['email','nombres','apellidos']
 
 
 
     def __str__(self):
         return self.nombres
-
-
-    def has_perm(self,perm, obj = None):
-        return True
-
-    def has_module_perms(self,app_label):
-        return True
-
-    @property
-    def is_staff(self):
-        return self.is_admin

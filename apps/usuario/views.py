@@ -5,17 +5,24 @@ from django.contrib.auth import authenticate, login, logout
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView, TemplateView
 from django.urls import reverse_lazy
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import PermissionRequiredMixin
+
 from django.shortcuts import get_object_or_404
 from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, JsonResponse
 from .models import Usuario
 from .forms import UsuarioForm
-
+from .mixins import AuthenticatedYSuperUsuarioMixin
 # Create your views here.
 
-
-
+class Inicio(LoginRequiredMixin, TemplateView):
+    template_name = 'index.html'
     
+class InicioUsuario(PermissionRequiredMixin, TemplateView):
+    permission_required = 'usuario.view_usuario'
+    template_name = 'usuario/listar_usuario.html'
+
+
 def login_view(request):
     if request.method == 'POST':
         username = request.POST['username']
@@ -34,7 +41,7 @@ def logout_view(request):
     return redirect('login')
 
 
-class CrearUsuario(LoginRequiredMixin, CreateView):
+class CrearUsuario(AuthenticatedYSuperUsuarioMixin, CreateView):
     form_class = UsuarioForm
     model = Usuario
     success_url = reverse_lazy("usuario:listar_usuario")
@@ -61,7 +68,7 @@ class CrearUsuario(LoginRequiredMixin, CreateView):
 
 
 
-class ListarUsuario(LoginRequiredMixin, ListView):
+class ListarUsuario(AuthenticatedYSuperUsuarioMixin, ListView):
     model = Usuario
     template_name = "usuario/listar_usuario.html"
     queryset = Usuario.objects.filter(is_active = True).all()
@@ -73,7 +80,7 @@ class ListarUsuario(LoginRequiredMixin, ListView):
         else:
             return redirect("usuario:inicio_usuario")
 
-class EliminarUsuario(DeleteView):
+class EliminarUsuario(AuthenticatedYSuperUsuarioMixin, DeleteView):
     model = Usuario
     template_name = "usuario/eliminar_usuario.html"
 
@@ -99,7 +106,7 @@ class EliminarUsuario(DeleteView):
 
 
 
-class EditarUsuario(UpdateView):
+class EditarUsuario(AuthenticatedYSuperUsuarioMixin, UpdateView):
     model = Usuario
     form_class = UsuarioForm
     template_name = "usuario/editar_usuario.html"

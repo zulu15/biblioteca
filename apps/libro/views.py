@@ -14,8 +14,6 @@ from .models import Autor, Libro
 
 # Empiezan las vistas del modelo Autor
 
-class Inicio(LoginRequiredMixin, TemplateView):
-    template_name = 'index.html'
 
 class ListarAutor(LoginRequiredMixin, ListView):
     model = Autor
@@ -77,7 +75,7 @@ class EliminarAutor(LoginRequiredMixin, DeleteView):
 
 
 
-class CrearAutor(CreateView):
+class CrearAutor(LoginRequiredMixin, CreateView):
     form_class = AutorForm
     model = Autor
     success_url = reverse_lazy("libro:listar_autor")
@@ -119,7 +117,7 @@ class ListarLibro(LoginRequiredMixin,ListView):
 
 
 
-class CrearLibro(CreateView):
+class CrearLibro(LoginRequiredMixin, CreateView):
     model = Libro
     form_class = LibroForm
     template_name = 'libro/libro/crear_libro.html'
