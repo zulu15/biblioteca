@@ -12,14 +12,13 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, JsonResponse
 from .models import Usuario
 from .forms import UsuarioForm
-from .mixins import AuthenticatedYSuperUsuarioMixin
+from .mixins import AuthenticatedYStaffMixin, ValidarPermisosUsuarioMixin
 # Create your views here.
 
 class Inicio(LoginRequiredMixin, TemplateView):
     template_name = 'index.html'
     
-class InicioUsuario(PermissionRequiredMixin, TemplateView):
-    permission_required = 'usuario.view_usuario'
+class InicioUsuario(AuthenticatedYStaffMixin, ValidarPermisosUsuarioMixin, TemplateView):
     template_name = 'usuario/listar_usuario.html'
 
 
@@ -34,14 +33,19 @@ def login_view(request):
             return redirect(next_param if next_param else 'index')
         else:
             return render(request, 'login.html', {'username':username,'error':'Usuario y/o contraseña incorrecta'})
-    return render(request, template_name = 'login.html')
+    else:
+        if request.method == 'GET':
+            if request.user is not None:
+                return redirect("index")
+    
+        return render(request, template_name = 'login.html')
 
 def logout_view(request):
     logout(request)
     return redirect('login')
 
 
-class CrearUsuario(AuthenticatedYSuperUsuarioMixin, CreateView):
+class CrearUsuario(AuthenticatedYStaffMixin,ValidarPermisosUsuarioMixin, CreateView):
     form_class = UsuarioForm
     model = Usuario
     success_url = reverse_lazy("usuario:listar_usuario")
@@ -68,7 +72,7 @@ class CrearUsuario(AuthenticatedYSuperUsuarioMixin, CreateView):
 
 
 
-class ListarUsuario(AuthenticatedYSuperUsuarioMixin, ListView):
+class ListarUsuario(AuthenticatedYStaffMixin, ValidarPermisosUsuarioMixin ,ListView):
     model = Usuario
     template_name = "usuario/listar_usuario.html"
     queryset = Usuario.objects.filter(is_active = True).all()
@@ -80,7 +84,7 @@ class ListarUsuario(AuthenticatedYSuperUsuarioMixin, ListView):
         else:
             return redirect("usuario:inicio_usuario")
 
-class EliminarUsuario(AuthenticatedYSuperUsuarioMixin, DeleteView):
+class EliminarUsuario(AuthenticatedYStaffMixin, ValidarPermisosUsuarioMixin ,DeleteView):
     model = Usuario
     template_name = "usuario/eliminar_usuario.html"
 
@@ -106,7 +110,7 @@ class EliminarUsuario(AuthenticatedYSuperUsuarioMixin, DeleteView):
 
 
 
-class EditarUsuario(AuthenticatedYSuperUsuarioMixin, UpdateView):
+class EditarUsuario(AuthenticatedYStaffMixin, ValidarPermisosUsuarioMixin ,UpdateView):
     model = Usuario
     form_class = UsuarioForm
     template_name = "usuario/editar_usuario.html"
