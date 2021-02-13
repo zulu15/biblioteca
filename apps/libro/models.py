@@ -19,6 +19,9 @@ class Autor(models.Model):
 
     def __str__(self):
         return self.nombre + " " + self.apellido
+        
+    def natural_key(self):
+        return f"{self.nombre} {self.apellido}"
 
 
 

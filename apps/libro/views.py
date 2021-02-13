@@ -110,7 +110,7 @@ class ListarLibro(LoginRequiredMixin,ListView):
     def get(self,request, *args, **kargs):
         if request.is_ajax():
             libros = Libro.objects.filter(estado = True).order_by('-pk')
-            return HttpResponse(serialize("json", libros), "application/json")
+            return HttpResponse(serialize("json", libros, use_natural_foreign_keys = True), "application/json")
         
         return redirect("libro:inicio_libro")    
     

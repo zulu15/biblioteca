@@ -1,7 +1,9 @@
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
+from django.contrib import messages
 
-class AuthenticatedYStaffMixin(object):
+
+class LoginYStaffMixin(object):
     
     def dispatch(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -15,7 +17,7 @@ class AuthenticatedYStaffMixin(object):
 
 
 class ValidarPermisosUsuarioMixin(object):
-    permission_required = ('usuario.view_usuario', 'usuario.add_usuario', 'usuario.change_usuario', 'usuario.delete_usuario' )
+    permission_required =  ('usuario.view_usuario', 'usuario.add_usuario', 'usuario.change_usuario', 'usuario.delete_usuario' )
     url_redirect = None
 
 
@@ -37,6 +39,7 @@ class ValidarPermisosUsuarioMixin(object):
         if request.user.has_perms(self.get_perms()):
             return super().dispatch(request, *args, **kwargs)
         else:
+            messages.error(request, 'Usted no tiene permisos para realizar esta acción!.')
             return redirect(self.get_url_redirect())    
             
                         

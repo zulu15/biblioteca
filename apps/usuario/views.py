@@ -12,13 +12,13 @@ from django.core.exceptions import PermissionDenied
 from django.http import HttpResponse, JsonResponse
 from .models import Usuario
 from .forms import UsuarioForm
-from .mixins import AuthenticatedYStaffMixin, ValidarPermisosUsuarioMixin
+from .mixins import LoginYStaffMixin, ValidarPermisosUsuarioMixin
 # Create your views here.
 
 class Inicio(LoginRequiredMixin, TemplateView):
     template_name = 'index.html'
     
-class InicioUsuario(AuthenticatedYStaffMixin, ValidarPermisosUsuarioMixin, TemplateView):
+class InicioUsuario(LoginYStaffMixin,ValidarPermisosUsuarioMixin, TemplateView):
     template_name = 'usuario/listar_usuario.html'
 
 
@@ -45,7 +45,7 @@ def logout_view(request):
     return redirect('login')
 
 
-class CrearUsuario(AuthenticatedYStaffMixin,ValidarPermisosUsuarioMixin, CreateView):
+class CrearUsuario(LoginYStaffMixin,ValidarPermisosUsuarioMixin, CreateView):
     form_class = UsuarioForm
     model = Usuario
     success_url = reverse_lazy("usuario:listar_usuario")
@@ -72,7 +72,7 @@ class CrearUsuario(AuthenticatedYStaffMixin,ValidarPermisosUsuarioMixin, CreateV
 
 
 
-class ListarUsuario(AuthenticatedYStaffMixin, ValidarPermisosUsuarioMixin ,ListView):
+class ListarUsuario(LoginYStaffMixin, ValidarPermisosUsuarioMixin ,ListView):
     model = Usuario
     template_name = "usuario/listar_usuario.html"
     queryset = Usuario.objects.filter(is_active = True).all()
@@ -84,14 +84,14 @@ class ListarUsuario(AuthenticatedYStaffMixin, ValidarPermisosUsuarioMixin ,ListV
         else:
             return redirect("usuario:inicio_usuario")
 
-class EliminarUsuario(AuthenticatedYStaffMixin, ValidarPermisosUsuarioMixin ,DeleteView):
+class EliminarUsuario(LoginYStaffMixin, ValidarPermisosUsuarioMixin ,DeleteView):
     model = Usuario
     template_name = "usuario/eliminar_usuario.html"
 
     def delete(self, request, *args, **kargs):
         if request.is_ajax():
             usuario = self.get_object()
-            if usuario.is_admin:
+            if usuario.is_staff:
                 error = "No tiene el permiso para eliminar usuarios administradores"
                 mensaje = f' El {self.model.__name__} no se pudo eliminar'
                 status_code = 403
@@ -110,7 +110,7 @@ class EliminarUsuario(AuthenticatedYStaffMixin, ValidarPermisosUsuarioMixin ,Del
 
 
 
-class EditarUsuario(AuthenticatedYStaffMixin, ValidarPermisosUsuarioMixin ,UpdateView):
+class EditarUsuario(LoginYStaffMixin, ValidarPermisosUsuarioMixin ,UpdateView):
     model = Usuario
     form_class = UsuarioForm
     template_name = "usuario/editar_usuario.html"

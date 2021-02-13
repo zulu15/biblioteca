@@ -55,8 +55,14 @@ class Usuario(AbstractBaseUser, PermissionsMixin):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['email','nombres','apellidos']
-
-
-
+    
+    '''
+    ej de como definir permisos utilizando la clase Meta
+    class Meta:
+        permissions = [
+            ('ver_recetas','Puede ver las recetas de los pacientes'),
+            ('editar_recetas','Puede editar recetas de los pacientes')
+        ]
+    '''
     def __str__(self):
         return self.nombres

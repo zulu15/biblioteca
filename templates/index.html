@@ -164,7 +164,18 @@
       <script src="{% static 'js/main.js' %}"></script>
       <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
+      <script>
+        {%  if messages %}
+           var html_mensaje = ""       
+          {% for mensaje in messages %}
+              html_mensaje += '{{mensaje}}'
+          {% endfor %}  
+          notificarError(html_mensaje)    
+        {% endif %}
+         </script>
+
       {% block extrajs  %}
+
       {% endblock extrajs %}
 
 <!--
