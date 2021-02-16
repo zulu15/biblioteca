@@ -15,7 +15,9 @@ function listar_libros(){
             for(var i = 0; i< response.length; i++){
                 var fila = "<tr>"
                 for(var field in response[i].fields ){
-                    var columna = "<td>"+response[i].fields[field]+"</td>"     
+                    //Definimos un valor por defecto en caso de que la columna este vacia, especialmente para el caso de autor
+                    valor_columna = response[i].fields[field] == "" ?  "Desconocido" : response[i].fields[field]
+                    var columna = "<td>"+valor_columna+"</td>"     
                     fila += columna;
                 }
                 fila+= "<td><button class='btn btn-primary' onclick='abrir_modal_edicion(\"/libro/editar_libro/"+response[i].pk+"\")'>Editar</button>&nbsp;"

@@ -1,4 +1,7 @@
 from django.db import models
+from django.core.exceptions import ValidationError
+from django.db.models.signals import post_save
+
 
 # Create your models here.
 
@@ -24,6 +27,15 @@ class Autor(models.Model):
         return f"{self.nombre} {self.apellido}"
 
 
+def quitar_relacion_autorlibro(sender,instance, **kargs):
+    autor_id = instance.id
+    if instance.estado == False:
+        libros = Libro.objects.filter(autor_id = autor_id)
+        for libro in libros:
+            libro.autor_id.remove(autor_id)
+
+post_save.connect(quitar_relacion_autorlibro, sender = Autor)
+
 
 class Libro(models.Model):
     id = models.AutoField(primary_key = True)
@@ -42,3 +54,8 @@ class Libro(models.Model):
 
     def __str__(self):
         return self.titulo
+
+   
+   
+    
+    
