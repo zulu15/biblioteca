@@ -18,6 +18,7 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path("inicio_autor/", login_required(TemplateView.as_view(template_name = "libro/autor/listar_autor.html")), name="inicio_autor"),
-    path("inicio_libro/", login_required(TemplateView.as_view(template_name = "libro/libro/listar_libro.html")), name = "inicio_libro"),
+    path("inicio_autor/", InicioAutor.as_view(), name="inicio_autor"),
+    path("inicio_libro/", InicioLibro.as_view(), name = "inicio_libro"),
+    
 ]

@@ -7,15 +7,18 @@ from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.serializers import serialize
 from django.http import HttpResponse, JsonResponse
-
+from apps.usuario.mixins import LoginYSuperUserMixin
 from .forms import AutorForm, LibroForm
 from .models import Autor, Libro
 
 
 # Empiezan las vistas del modelo Autor
 
+class InicioAutor(LoginYSuperUserMixin ,TemplateView):
+    template_name = "libro/autor/listar_autor.html"
 
-class ListarAutor(LoginRequiredMixin, ListView):
+
+class ListarAutor(LoginYSuperUserMixin, ListView):
     model = Autor
     
     def get(self, request, *args, **kargs):
@@ -27,7 +30,7 @@ class ListarAutor(LoginRequiredMixin, ListView):
             return redirect("libro:inicio_autor")    
 
 
-class EditarAutor(LoginRequiredMixin, UpdateView):
+class EditarAutor(LoginYSuperUserMixin, UpdateView):
     template_name = 'libro/autor/editar_autor.html'
     model = Autor
     form_class = AutorForm
@@ -54,7 +57,7 @@ class EditarAutor(LoginRequiredMixin, UpdateView):
 
 
 
-class EliminarAutor(LoginRequiredMixin, DeleteView):
+class EliminarAutor(LoginYSuperUserMixin, DeleteView):
     model = Autor
     template_name = "libro/autor/eliminar_autor.html"
 
@@ -75,7 +78,7 @@ class EliminarAutor(LoginRequiredMixin, DeleteView):
 
 
 
-class CrearAutor(LoginRequiredMixin, CreateView):
+class CrearAutor(LoginYSuperUserMixin, CreateView):
     form_class = AutorForm
     model = Autor
     success_url = reverse_lazy("libro:listar_autor")
@@ -103,7 +106,12 @@ class CrearAutor(LoginRequiredMixin, CreateView):
 
 # Empiezan las vistas del modelo Libro
 
-class ListarLibro(LoginRequiredMixin,ListView):
+
+class InicioLibro(LoginYSuperUserMixin ,TemplateView):
+    template_name = "libro/libro/listar_libro.html"
+
+
+class ListarLibro(LoginYSuperUserMixin,ListView):
     model = Libro
     
 
@@ -117,7 +125,7 @@ class ListarLibro(LoginRequiredMixin,ListView):
 
 
 
-class CrearLibro(LoginRequiredMixin, CreateView):
+class CrearLibro(LoginYSuperUserMixin, CreateView):
     model = Libro
     form_class = LibroForm
     template_name = 'libro/libro/crear_libro.html'
@@ -125,7 +133,7 @@ class CrearLibro(LoginRequiredMixin, CreateView):
 
     def post(self, request, *args, **kargs):
         if request.is_ajax():
-            form = self.form_class(request.POST)
+            form = self.form_class(data = request.POST, files = request.FILES)
             if form.is_valid():
                 form.save()
                 mensaje = f"El {self.model.__name__} se ha registrado correctamente!"
@@ -143,14 +151,14 @@ class CrearLibro(LoginRequiredMixin, CreateView):
         return redirect("libro:inicio_libro")    
 
 
-class EditarLibro(LoginRequiredMixin,UpdateView):
+class EditarLibro(LoginYSuperUserMixin,UpdateView):
     model = Libro
     form_class = LibroForm
     template_name = "libro/libro/editar_libro.html"
     
     def post(self,request,*args, **kargs):
         if request.is_ajax():
-            libro_form = self.form_class(request.POST, instance = self.get_object())
+            libro_form = self.form_class(data = request.POST, files = request.FILES ,instance = self.get_object())
             if libro_form.is_valid():
                 libro_form.save()
                 mensaje = f"El {self.model.__name__} se editó correctamente!"
@@ -168,7 +176,7 @@ class EditarLibro(LoginRequiredMixin,UpdateView):
         return redirect("libro:inicio_libro")
 
 
-class EliminarLibro(LoginRequiredMixin,DeleteView):
+class EliminarLibro(LoginYSuperUserMixin,DeleteView):
     model = Libro
     template_name = "libro/libro/eliminar_libro.html"
 
@@ -185,3 +193,11 @@ class EliminarLibro(LoginRequiredMixin,DeleteView):
 
         return redirect("libro:inicio_libro")    
 
+
+
+class ListarLibrosDisponibles(LoginRequiredMixin,ListView):
+    template_name = "libro/libro/libros_disponibles.html"
+    model = Libro
+    def get_queryset(self):
+        queryset = self.model.objects.filter(estado = True, cantidad__gte = 1)
+        return queryset

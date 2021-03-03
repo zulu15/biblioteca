@@ -40,6 +40,9 @@ post_save.connect(quitar_relacion_autorlibro, sender = Autor)
 class Libro(models.Model):
     id = models.AutoField(primary_key = True)
     titulo = models.CharField("Título", max_length = 255, blank = False, null = False)
+    descripcion = models.TextField("Descripción", null = True, blank= True)
+    imagen = models.ImageField("Imágen", upload_to="libros/", max_length=255, null = True, blank = True)
+    cantidad = models.SmallIntegerField("Stock", default = 1)
     fecha_publicacion = models.DateField("Fecha de publicación", blank = False, null = False)
     #Creamos la relacion
     # Relacion uno a a uno

@@ -1,0 +1,47 @@
+{% extends 'index.html' %}
+{% load static %}
+{% block titulo %}
+Libros disponibles
+{% endblock titulo %}
+
+{% block titulo_principal %}
+Libros disponibles
+{% endblock titulo_principal %}
+
+{% block extracss %}
+{% endblock extracss %}
+  
+{% block body %}
+{% if object_list %}  
+    <div class="row"> 
+    {% for libro in object_list %}
+            <div class="col-md-4">
+            <div class="card" style="width: 18rem;">
+                <img class="card-img-top" src="{{libro.imagen.url}}" alt="Card image cap">
+                <div class="card-body">
+                <h5 class="card-title">{{libro.titulo}}</h5>
+                <p class="card-text">{{libro.descripcion}}</p>
+                <a href="#" class="btn btn-primary">Reservar</a>
+                </div>
+            </div>
+            </div>  
+    {% endfor %}
+    </div>
+
+{% endif %}
+
+{% if not object_list %}
+    <div class="alert alert-warning" role="alert">
+        No hay libros disponibles
+    </div>
+{% endif %}
+
+
+{% endblock body %}
+
+
+{% block extrajs %}
+  <script src="{% static 'js/libro/libro.js' %}"></script>
+  <script src="//cdn.datatables.net/1.10.23/js/jquery.dataTables.min.js"></script>
+{% endblock extrajs %}
+  

@@ -54,7 +54,7 @@ class LibroForm(forms.ModelForm):
     
     class Meta:
         model = Libro
-        fields = ['titulo','autor_id','fecha_publicacion']
+        fields = ['titulo','autor_id','fecha_publicacion', 'descripcion', 'cantidad','imagen']
         labels = {
             'titulo':'Ingrese el título del libro',
             'autor_id':'Seleccione los autores del libro',
@@ -79,6 +79,13 @@ class LibroForm(forms.ModelForm):
                     'class':'form-control',
                     'id':'fecha_publicacion'
                 }
-            )
+            ),
+            'descripcion': forms.Textarea(attrs={
+                'class':'form-control'
+            }),
+            'cantidad': forms.NumberInput(attrs={
+                'class':'form-control'
+            })
+
 
         }

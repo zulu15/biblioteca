@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'import_export',
     'apps.libro',
     'apps.usuario'
 ]
@@ -122,3 +123,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 AUTH_USER_MODEL = 'usuario.Usuario'
+
+
+MEDIA_URL = '/media/' #indica donde debe buscar los archivos subidos por el usuario
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media') #crea la carpeta

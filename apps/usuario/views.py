@@ -35,7 +35,7 @@ def login_view(request):
             return render(request, 'login.html', {'username':username,'error':'Usuario y/o contraseña incorrecta'})
     else:
         if request.method == 'GET':
-            if request.user is not None:
+            if request.user.is_authenticated:
                 return redirect("index")
     
         return render(request, template_name = 'login.html')
