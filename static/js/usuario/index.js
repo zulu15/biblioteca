@@ -21,7 +21,7 @@ function listadoUsuario(){
         fila+= "<td>"+response[i].fields["email"]+"</td>"
         fila+= "<td>"+response[i].fields["nombres"]+"</td>"
         fila+= "<td>"+response[i].fields["apellidos"]+"</td>"
-        fila+= "<td>"+response[i].fields["is_admin"]+"</td>"
+        fila+= "<td>"+response[i].fields["is_superuser"]+"</td>"
         fila+= "<td><button type='button' class='btn btn-primary' onclick='abrir_modal_edicion(\"/usuario/editar_usuario/"+response[i]["pk"]+"\")'>Editar</button>&nbsp;&nbsp;"
         fila+= "<button type='button' class='btn btn-danger' onclick='abrir_modal_eliminacion(\"/usuario/eliminar_usuario/"+response[i]["pk"]+"\")'>Eliminar</button></td>"
         fila+="</tr>"

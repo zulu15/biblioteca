@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.html import escape
 from .models import Usuario
 
 
@@ -43,6 +44,16 @@ class UsuarioForm(forms.ModelForm):
         user.set_password(self.cleaned_data["password2"])
         user.save()
         return user
+
+    def clean_username(self):
+        return escape(self.cleaned_data.get('username'))           
+
+    def clean_nombres(self):
+        return escape(self.cleaned_data.get('nombres'))           
+
+    def clean_apellidos(self):
+        return escape(self.cleaned_data.get('apellidos'))           
+
 
 
     class Meta:

@@ -103,6 +103,13 @@ function abrir_modal_edicion(url){
 	});
 }
 
+function abrir_modal_detalle(url){
+	$("#detalle").load(url, function(){
+		$(this).modal('show');
+	});
+}
+
+
 
 function cerrar_modal_creacion(){
 	$("#creacion").modal('hide');

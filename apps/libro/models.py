@@ -55,10 +55,13 @@ class Libro(models.Model):
         verbose_name_plural = "Libros"
         ordering = ["titulo"]
 
+    def obtener_autores(self):
+        autores = str([autor for autor in self.autor_id.all().values_list('nombre', flat = True)]).replace("[","").replace("]","").replace("'","")
+        return autores
+
     def __str__(self):
         return self.titulo
 
-   
    
     
     

@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from django.core.exceptions import ObjectDoesNotExist
 # Create your views here.
-from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView
+from django.views.generic import View, TemplateView, ListView, UpdateView, CreateView, DeleteView, DetailView
 from django.urls import reverse_lazy
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -201,3 +201,13 @@ class ListarLibrosDisponibles(LoginRequiredMixin,ListView):
     def get_queryset(self):
         queryset = self.model.objects.filter(estado = True, cantidad__gte = 1)
         return queryset
+
+
+
+
+
+
+
+class DetalleLibroDisponible(LoginRequiredMixin, DetailView):
+    model = Libro
+    template_name = "libro/detalle_libro.html"

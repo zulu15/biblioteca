@@ -1,7 +1,22 @@
 from django import forms
+from django.utils.html import escape
 from .models import Autor, Libro
 
 class AutorForm(forms.ModelForm):
+
+    def clean_nombre(self):
+        return escape(self.cleaned_data.get('nombre'))       
+    
+    def clean_apellido(self):
+        return escape(self.cleaned_data.get('apellido'))       
+    
+    def clean_nacionalidad(self):
+        return escape(self.cleaned_data.get('nacionalidad'))           
+    
+    def clean_descripcion(self):
+        return escape(self.cleaned_data.get('descripcion'))               
+    
+    
     class Meta:
         model = Autor
         fields = ["nombre","apellido","nacionalidad","descripcion"]
@@ -47,7 +62,15 @@ class AutorForm(forms.ModelForm):
 
 class LibroForm(forms.ModelForm):
 
+    def clean_titulo(self):
+        return escape(self.cleaned_data.get('titulo'))       
     
+    def clean_descripcion(self):
+        return escape(self.cleaned_data.get('descripcion'))       
+    
+      
+        
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["autor_id"].queryset = Autor.objects.filter(estado = True)
