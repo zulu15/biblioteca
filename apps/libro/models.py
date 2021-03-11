@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
-from django.db.models.signals import post_save
-
+from django.db.models.signals import post_save, pre_save
+from apps.usuario.models import Usuario
 
 # Create your models here.
 
@@ -63,5 +63,38 @@ class Libro(models.Model):
         return self.titulo
 
    
+class Reserva(models.Model):
+    id = models.AutoField(primary_key=True)
+    libro = models.ForeignKey(Libro, on_delete=models.CASCADE)
+    usuario = models.ForeignKey(Usuario, on_delete=models.CASCADE)
+    fecha_creacion = models.DateField("Fecha de creación", auto_now=True, auto_now_add=False)
+    estado = models.BooleanField("Activo/Inactivo", default= True)
+    cantidad_dias = models.SmallIntegerField("Días a reservar", default=7)
+
+    class Meta:
+        verbose_name = "Reserva"
+        verbose_name_plural = "Reservas"
     
-    
+    def __str__(self):
+        return f"{self.libro} reservado por {self.usuario}"
+
+
+
+def reducir_stock_reserva_libro(sender,instance,**kargs):
+    libro = instance.libro
+    if libro.cantidad > 0:
+        libro.cantidad = libro.cantidad - 1
+        libro.save()
+'''
+def validar_reserva_desde_admin(sender, instance, **kargs):
+    libro = instance.libro
+    if libro.cantidad < 1:
+        raise Exception("No puedes realizar reservas en libros que no tienen stock!")
+'''
+
+
+
+
+
+post_save.connect(reducir_stock_reserva_libro, sender = Reserva)
+#pre_save.connect(validar_reserva_desde_admin, sender = Reserva)

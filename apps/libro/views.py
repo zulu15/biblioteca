@@ -9,8 +9,8 @@ from django.core.serializers import serialize
 from django.http import HttpResponse, JsonResponse
 from apps.usuario.mixins import LoginYSuperUserMixin
 from .forms import AutorForm, LibroForm
-from .models import Autor, Libro
-
+from .models import Autor, Libro, Reserva
+from apps.usuario.models import Usuario
 
 # Empiezan las vistas del modelo Autor
 
@@ -211,3 +211,33 @@ class ListarLibrosDisponibles(LoginRequiredMixin,ListView):
 class DetalleLibroDisponible(LoginRequiredMixin, DetailView):
     model = Libro
     template_name = "libro/detalle_libro.html"
+
+
+
+class RegistrarReserva(LoginRequiredMixin, CreateView):
+    model = Reserva
+    
+    def post(self, request, *args, **kargs):
+        if request.is_ajax():
+            libro = Libro.objects.filter(id = request.POST.get('libro')).first()
+            usuario = Usuario.objects.filter(id = request.POST.get('usuario')).first()
+            if libro and usuario:
+                if libro.cantidad > 0:
+                    reserva = self.model(
+                        libro= libro,
+                        usuario= usuario,
+                    )
+                    reserva.save()
+                    mensaje = f"La {self.model.__name__} se realizó correctamente!"
+                    error = "No hay error"
+                    response = JsonResponse({"mensaje": mensaje, "error":error})
+                    response.status_code = 201
+                else:
+                    mensaje = f"La {self.model.__name__} no se realizó correctamente."
+                    error = "No puedes realizar reservas sobre libros sin stock."
+                    response = JsonResponse({"mensaje": mensaje, "error":error})
+                    response.status_code = 400
+                return response
+        
+        return redirect("index")
+ 

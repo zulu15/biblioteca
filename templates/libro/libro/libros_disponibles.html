@@ -16,19 +16,19 @@ Libros disponibles
     <div class="row"> 
     {% for libro in object_list %}
             <div class="col-md-4 col-sm-12">
-            <div class="card">
-                <img class="card-img-top" src="{{libro.imagen.url}}" alt="Card image cap" style="height: 18rem;">
-                <div class="card-body">
-                <h5 class="card-title">{{libro.titulo}}</h5>
-                <p class="card-text" style="height: 10rem; overflow:hidden">{{libro.descripcion}}</p>
-                <a href="#" class="btn btn-primary">Reservar</a>
-                <button class="btn btn-default" onclick="abrir_modal_detalle('{% url 'libro:detalle_libro' libro.id %}')">Ver más</button>
+                <div class="card">
+                    <img class="card-img-top" src="{{libro.imagen.url}}" alt="Card image cap" style="height: 18rem;">
+                    <div class="card-body">
+                    <h5 class="card-title">{{libro.titulo}}</h5>
+                    <p class="card-text" style="height: 10rem; overflow:hidden">{{libro.descripcion}}</p>
+                    <button class="btn btn-primary" onclick="reservarLibro({{libro.id}}, {{request.user.id}})">Reservar</button>
+                    <button class="btn btn-default" onclick="abrir_modal_detalle('{% url 'libro:detalle_libro' libro.id %}')">Ver más</button>
                 </div>
             </div>
             </div>  
     {% endfor %}
     </div>
-
+{% csrf_token %}
 {% endif %}
 
 {% if not object_list %}
@@ -44,7 +44,9 @@ Libros disponibles
 
 
 {% endblock body %}
-
+{% block extrajs %}
+<script src="{% static 'js/reserva/reserva.js' %}"></script>
+{% endblock extrajs %}
 
 
 

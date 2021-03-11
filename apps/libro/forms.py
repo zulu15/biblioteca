@@ -1,6 +1,20 @@
 from django import forms
 from django.utils.html import escape
-from .models import Autor, Libro
+from django.core.exceptions import ValidationError
+
+from .models import Autor, Libro, Reserva
+
+
+class ReservaForm(forms.ModelForm):
+    class Meta:
+        model = Reserva
+        fields = "__all__"
+
+    def clean_libro(self):
+        libro = self.cleaned_data["libro"]
+        if libro.cantidad < 1:
+            raise ValidationError("No se puede reservar este libro, no tiene stock!") 
+        return libro
 
 class AutorForm(forms.ModelForm):
 

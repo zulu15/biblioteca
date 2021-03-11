@@ -16,6 +16,9 @@ urlpatterns = [
     path("editar_libro/<int:pk>",EditarLibro.as_view(), name = "editar_libro"),
     path('eliminar_libro/<int:pk>', EliminarLibro.as_view(), name="eliminar_libro"),
     path('detalle_libro/<int:pk>', DetalleLibroDisponible.as_view(), name="detalle_libro"),
+
+    #vistas para reservas
+    path("reservar-libro/",RegistrarReserva.as_view(), name = "reservar_libro"),
 ]
 
 urlpatterns += [
