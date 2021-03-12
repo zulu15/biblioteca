@@ -198,10 +198,10 @@ class EliminarLibro(LoginYSuperUserMixin,DeleteView):
 class ListarLibrosDisponibles(LoginRequiredMixin,ListView):
     template_name = "libro/libro/libros_disponibles.html"
     model = Libro
-    def get_queryset(self):
-        queryset = self.model.objects.filter(estado = True, cantidad__gte = 1)
-        return queryset
-
+    
+    def get(self, request, *args, **kargs):
+        libros = self.model.objects.exclude(reserva__usuario = request.user).exclude(cantidad = 0).exclude(estado = False )
+        return render(request, self.template_name, {"object_list": libros})
 
 
 
@@ -241,3 +241,13 @@ class RegistrarReserva(LoginRequiredMixin, CreateView):
         
         return redirect("index")
  
+
+
+
+class ListarReservas(LoginRequiredMixin, ListView):
+    model = Reserva
+    template_name = "libro/reserva/listar_reservas.html"
+    
+    def get(self, request, *args, **kargs):
+        reservas = self.model.objects.filter(usuario = request.user)
+        return render(request, self.template_name, {"object_list": reservas})

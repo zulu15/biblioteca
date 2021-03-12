@@ -19,6 +19,7 @@ urlpatterns = [
 
     #vistas para reservas
     path("reservar-libro/",RegistrarReserva.as_view(), name = "reservar_libro"),
+    path("mis-reservas/",ListarReservas.as_view(), name = "mis_reservas"),
 ]
 
 urlpatterns += [

@@ -2,7 +2,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 from django.db.models.signals import post_save, pre_save
 from apps.usuario.models import Usuario
-
+import datetime
 # Create your models here.
 
 
@@ -70,6 +70,13 @@ class Reserva(models.Model):
     fecha_creacion = models.DateField("Fecha de creación", auto_now=True, auto_now_add=False)
     estado = models.BooleanField("Activo/Inactivo", default= True)
     cantidad_dias = models.SmallIntegerField("Días a reservar", default=7)
+
+    def calcular_vencimiento(self):
+        return self.fecha_creacion + datetime.timedelta(days = 7)
+
+
+
+
 
     class Meta:
         verbose_name = "Reserva"
